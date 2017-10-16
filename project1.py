@@ -38,22 +38,28 @@ with open('homicideChicago.json') as data_file:
 # print(response.json()['results'][0]['formatted_address'])
 # print(response.json(['results'][0]['formatted_address']))
 # print(len(myData))
+
+
 #
-for event in myData[1:100]:
+for idx, event in enumerate(myData[1:]):
     xyCoordinate = event['lat'] + ',' + event['long']
 
-    eventURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+xyCoordinate+"&key=AIzaSyB0hMeyy5OEw79210qxgrics9BgxB6YZxU"
+    eventURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+xyCoordinate+"&key=AIzaSyCANamh_uRY6Ung4FunNjg1IdPSR4m_KHg"
     response = requests.get(eventURL)
 
-    print(response.json()['results'][0]['formatted_address'].split(" ")[-2].rstrip(','))
+    a = response.json()['results']
+    if len(a) > 0:
+        myData[idx]["zipcode"] = response.json()['results'][0]['formatted_address'].split(" ")[-2].rstrip(',')
+    else:
+        myData[idx]["zipcode"] = None
+
+    print(idx)
+
+with open('homicideWithZip.json', 'w') as fp:
+    json.dump(myData, fp)
 
 
-
-    # eventLocation = geolocator.reverse(xyCoordinate)[0].split(",")
-    # event["location"] = eventLocation
-    #
-    # print(event["location"])
-
+# something wrong with myData[120]
 #
 #         myData.append(row)
 #
